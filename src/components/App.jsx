@@ -1,27 +1,47 @@
 import exampleVideoData from '../data/exampleVideoData.js';
 import VideoList from './VideoList.js';
 import VideoPlayer from './VideoPlayer.js';
-const { useState } = React;
+import Search from './Search.js';
+import searchYouTube from '../lib/searchYouTube.js';
+const { useState, useEffect } = React;
 
 var App = () => {
 
-  const [videos, setVideos] = useState([exampleVideoData]);
+  const [videos, setVideos] = useState([]);
   const [currVideo, setCurrVideo] = useState(exampleVideoData[0]);
 
+  var changeVideo = function (index) {
+    setCurrVideo(videos[index]);
+  };
+
+  var updateVideos = function (data) {
+    setVideos(data);
+  };
+
+  useEffect(() => {
+    searchYouTube('cats', (data) => {
+      setVideos(data);
+    });
+  }, []);
 
   return (
     <div>
       <nav className="navbar">
         <div className="col-md-6 offset-md-3">
-          <div><h5><em>search</em> view goes here</h5></div>
+          <Search searchYouTube={searchYouTube} updateVideos={updateVideos}/>
         </div>
+        <p>Autoplay On/Off:</p>
+        <label className="switch">
+          <input type="checkbox"/>
+          <span className="slider round"></span>
+        </label>
       </nav>
       <div className="row">
         <div className="col-md-7">
-          <VideoPlayer video={exampleVideoData[0]}/>
+          <VideoPlayer video={ currVideo }/>
         </div>
         <div className="col-md-5">
-          <VideoList videos={exampleVideoData}/>
+          <VideoList videos={ videos } changeVideo={changeVideo}/>
         </div>
       </div>
     </div>
