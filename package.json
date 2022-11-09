@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "test": "live-server --open=./SpecRunner.html --port=8081",
-    "start": "npx babel . --out-dir=compiled --presets=@babel/preset-react --ignore=node_modules,compiled --source-maps=inline --watch & npx live-server"
+    "build:watch": "npx babel . --out-dir=compiled --presets=@babel/preset-react --ignore=node_modules,compiled --source-maps=inline --watch",
+    "start": "npm build:watch & npx live-server"
   },
   "dependencies": {
     "@babel/preset-env": "^7.20.2",
